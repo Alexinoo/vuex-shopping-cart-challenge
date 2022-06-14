@@ -17,12 +17,33 @@ const store = createStore({
         }
     },
 
-    mutations : {  },
+    mutations :{
+        login(state){
+            state.isLoggedIn = true;
+        } ,
 
-    actions : {  } ,
+        logout(state){
+            state.isLoggedIn = false;
+        }
+    },
 
-    getters : {  }
+    actions : {
 
+        login(context) {
+            context.commit('login');
+        },
+        logout(context) {
+            context.commit('logout');
+        },
+ 
+    },
+
+    getters : {
+        isAuthenticated(state){
+            return state.isLoggedIn;
+        }
+    }
+   
 })
 
 export default store;
