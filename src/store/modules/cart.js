@@ -1,5 +1,7 @@
 export default {
 
+    namespaced : true,
+
     state(){
         return {           
              items: [],
@@ -7,35 +9,36 @@ export default {
               qty: 0 
             }
         },
+        
     mutations : {
 
-              addProductToCart(state , payload) {
+        addProductToCart(state , payload) {
 
-                    const productData = payload.product
+            const productData = payload
 
-                    const productInCartIndex = state.items.findIndex(
-                        (ci) => ci.productId === productData.id
-                    );
+            const productInCartIndex = state.items.findIndex(
+                (ci) => ci.productId === productData.id
+            );
 
-                    if (productInCartIndex >= 0) {
+            if (productInCartIndex >= 0) {
 
-                        state.items[productInCartIndex].qty++;
+                state.items[productInCartIndex].qty++;
 
-                    } else {
-                        const newItem = {
-                                    productId: productData.id,
-                                    title: productData.title,
-                                    image: productData.image,
-                                    price: productData.price,
-                                    qty: 1,
-                        };
-                        state.items.push(newItem);
-                    }
-                  state.qty++;
-                  state.total += productData.price;
-              },
+            } else {
+                const newItem = {
+                            productId: productData.id,
+                            title: productData.title,
+                            image: productData.image,
+                            price: productData.price,
+                            qty: 1,
+                };
+                state.items.push(newItem);
+            }
+            state.qty++;
+            state.total += productData.price;
+        },
 
-            removeProductFromCart(state , payload) {
+        removeProductFromCart(state , payload) {
 
             const prodId =  payload.productId
 
@@ -54,7 +57,10 @@ export default {
     actions : {
 
         addToCart(context , payload){
-            context.commit('addProductToCart', payload)
+            const prodId = payload.id
+            const products = context.rootGetters['prods/getProducts'];
+            const product = products.find(prod => prod.id === prodId )
+            context.commit('addProductToCart', product)
         }, 
 
         removeFromCart(context , payload){
@@ -64,16 +70,16 @@ export default {
 
     getters : {
 
-        products(state){
-            return state.items
+        getCartItems(state){
+            return state.items;
         },
 
-        totalSum(state){
-            return state.total
+        getotalSum(state){
+            return state.total;
         },
 
-        quantity(state){
-            return state.qty
+        getQuantity(state){
+            return state.qty;
         } 
     }
 
